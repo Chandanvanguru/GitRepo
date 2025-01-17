@@ -1,4 +1,5 @@
  HEAD
+ HEAD
 
 Changes has been made to the files. So file versioning will start now.
 v3 added
@@ -8,4 +9,10 @@ Changes has been made to the files. So file versioning will start now.
 v3 added
 
 FileB FeatureA
+FeatureB
+
+Changes has been made to the files. So file versioning will start now.
+v3 added
+FileB
+FeatureA
 FeatureB
