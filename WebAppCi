@@ -1,0 +1,15 @@
+# azure-pipelines.yml
+trigger:
+- main   # runs pipeline on every push to main branch
+
+pool:
+  vmImage: 'ubuntu-latest'   # hosted agent
+
+steps:
+- script: echo "Hello, Azure DevOps!"
+  displayName: "Run a simple script"
+
+- script: |
+    echo "Building project..."
+    echo "Build complete!"
+  displayName: "Build the app"
