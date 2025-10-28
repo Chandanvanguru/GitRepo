@@ -3,24 +3,33 @@ trigger:
 
 stages:
 - stage: Build
-  displayName: "Build Stage"
   jobs:
   - job: BuildJob
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - script: echo "Building the app..."
-      displayName: "Build step"
-    - publish: $(Pipeline.Workspace)/drop
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+    - script: |
+        npm install
+        npm run build
+      displayName: 'Build app'
+    - publish: $(Build.ArtifactStagingDirectory)
       artifact: drop
 
 - stage: Deploy
-  displayName: "Deploy Stage"
   dependsOn: Build
   jobs:
-  - job: DeployJob
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - script: echo "Deploying app to staging environment..."
-      displayName: "Deploy step"
+  - deployment: DeployWebApp
+    environment: 'production'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+          - task: AzureWebApp@1
+            inputs:
+              azureSubscription: 'my-service-connection'
+              appName: 'mywebapp'
+              package: '$(Pipeline.Workspace)/drop'
