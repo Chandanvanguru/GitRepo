@@ -1,0 +1,26 @@
+trigger:
+- main
+
+stages:
+- stage: Build
+  displayName: "Build Stage"
+  jobs:
+  - job: BuildJob
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: echo "Building the app..."
+      displayName: "Build step"
+    - publish: $(Pipeline.Workspace)/drop
+      artifact: drop
+
+- stage: Deploy
+  displayName: "Deploy Stage"
+  dependsOn: Build
+  jobs:
+  - job: DeployJob
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - script: echo "Deploying app to staging environment..."
+      displayName: "Deploy step"
